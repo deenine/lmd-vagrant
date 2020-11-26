@@ -5,7 +5,7 @@
     travis_password: "iPxoMYWOri3eg"
     travis_home: "/home/{{ travis_user }}"
     lmd_dir: "{{ travis_home }}/linux-minidisc"
-  sudo: yes
+  become: true
   pre_tasks:
     - name: Apt-get Update
       apt: update_cache=yes
