@@ -7,30 +7,34 @@
     lmd_dir: "{{ travis_home }}/linux-minidisc"
   pre_tasks:
     - name: Apt-get Update
+      become: true
       apt: update_cache=yes
+
     - name: Install Git
+      become: true
       apt: name=git
+
 
 
   tasks:
    - name: Create Travis User
-     user: name={{ travis }}
+     become: true
+     user: name={{ travis_user }}
            password={{ travis_password }}
            comment="Travis User"
-           become=true
            createhome=yes
            home={{ travis_home }}
 
    - name: Enable passwordless sudo for stack user
+     become: true
      copy: content="%{{ travis_user }} ALL=(ALL) NOPASSWD:ALL"
            dest=/etc/sudoers.d/{{ travis_user }}
-           become=true
            owner=root
            group=root
            mode=0440
 
-   - name: Clone linux repo
-     user: become=true
-           become_user=travis
-     git: repo=https://github.com/deenine/linux-minidisc
-          dest={{ devstack_dir }}
+   - name: Clone linux-minidisc repo
+     become: true
+     become_user: "{{ travis_user }}"
+     git:  repo=https://github.com/deenine/linux-minidisc
+           dest={{ devstack_dir }}
