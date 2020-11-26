@@ -3,8 +3,8 @@
   vars:
     travis_user: "travis"
     travis_password: "iPxoMYWOri3eg"
-    travis_home: /home/{{ travis_user }}
-    lmd_dir: {{ travis_home }}/linux-minidisc
+    travis_home: "/home/{{ travis_user }}"
+    lmd_dir: "{{ travis_home }}/linux-minidisc"
   sudo: yes
   pre_tasks:
     - name: Apt-get Update
