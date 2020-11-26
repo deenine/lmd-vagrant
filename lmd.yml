@@ -5,11 +5,9 @@
     travis_password: "iPxoMYWOri3eg"
     travis_home: "/home/{{ travis_user }}"
     lmd_dir: "{{ travis_home }}/linux-minidisc"
-  become: true
   pre_tasks:
     - name: Apt-get Update
       apt: update_cache=yes
-
     - name: Install Git
       apt: name=git
 
@@ -19,17 +17,20 @@
      user: name={{ travis }}
            password={{ travis_password }}
            comment="Travis User"
+           become=true
            createhome=yes
            home={{ travis_home }}
 
    - name: Enable passwordless sudo for stack user
      copy: content="%{{ travis_user }} ALL=(ALL) NOPASSWD:ALL"
            dest=/etc/sudoers.d/{{ travis_user }}
+           become=true
            owner=root
            group=root
            mode=0440
 
    - name: Clone linux repo
-     sudo_user: stack
+     user: become=true
+           become_user=travis
      git: repo=https://github.com/deenine/linux-minidisc
           dest={{ devstack_dir }}
