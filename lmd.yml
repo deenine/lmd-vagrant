@@ -37,4 +37,4 @@
      become: true
      become_user: "{{ travis_user }}"
      git:  repo=https://github.com/deenine/linux-minidisc
-           dest={{ devstack_dir }}
+           dest={{ lmd_dir }}
