@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
     v.cpus = 8
   end
   config.vm.provision "ansible" do |ansible|
+    ansible.compatibility_mode = "2.0"
     ansible.playbook = "lmd.yml"
     ansible.raw_arguments = ['-T 30', '-e pipelining=True']
   end
