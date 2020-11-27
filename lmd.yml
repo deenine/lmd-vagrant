@@ -37,4 +37,5 @@
      become: true
      become_user: "{{ travis_user }}"
      git:  repo=https://github.com/deenine/linux-minidisc
+           version=himd-json
            dest={{ lmd_dir }}
