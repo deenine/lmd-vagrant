@@ -22,6 +22,10 @@
       become: true
       apt: name=gettext
 
+    - name: Install cmake
+      become: true
+      apt: name=cmake
+
 
 
 
