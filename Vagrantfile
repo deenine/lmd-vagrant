@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network, ip: "10.12.14.16"
   config.vm.network :"forwarded_port", guest:5000, host:5000
   config.vm.provider "virtualbox" do |v|
-    v.name = "lmd-test-vm"
+    v.name = "lmd-build-vm-trusty64"
     v.memory = 65536
     v.customize ["modifyvm", :id, "--cpuexecutioncap", "75"]
     v.cpus = 8

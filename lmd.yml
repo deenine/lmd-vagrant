@@ -10,9 +10,18 @@
       become: true
       apt: update_cache=yes
 
+    - name: Install Build Essentials
+      become: true
+      apt: name=build-essential
+
     - name: Install Git
       become: true
       apt: name=git
+
+    - name: Install gettext
+      become: true
+      apt: name=gettext
+
 
 
 
