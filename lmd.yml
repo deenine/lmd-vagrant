@@ -27,8 +27,6 @@
       apt: name=cmake
 
 
-
-
   tasks:
    - name: Create Travis User
      become: true
@@ -38,7 +36,7 @@
            createhome=yes
            home={{ travis_home }}
 
-   - name: Enable passwordless sudo for stack user
+   - name: Enable passwordless sudo for travis user
      become: true
      copy: content="%{{ travis_user }} ALL=(ALL) NOPASSWD:ALL"
            dest=/etc/sudoers.d/{{ travis_user }}
@@ -52,3 +50,49 @@
      git:  repo=https://github.com/deenine/linux-minidisc
            version=himd-json
            dest={{ lmd_dir }}
+
+
+   - name: Install dependencies (mingw32)
+     become: true
+     become_user: "{{ travis_user }}"
+     args:
+       chdir: "{{ lmd_dir }}"
+     environment:
+       BUILD_TYPE: "linux-cross-mingw32"
+     command: "sh build/install_dependencies.sh"
+
+
+  - name: qmake (mingw32)
+    become: true
+    become_user: "{{ travis_user }}"
+    args:
+      chdir: "{{ lmd_dir }}"
+    environment:
+      BUILD_TYPE: "linux-cross-mingw32"
+    command: "sh build/cross_wrapper_mingw.sh qmake CONFIG+=without_gui"
+
+  - name: make (mingw32)
+    become: true
+    become_user: "{{ travis_user }}"
+    args:
+      chdir: "{{ lmd_dir }}"
+    environment:
+      BUILD_TYPE: "linux-cross-mingw32"
+    command: "sh build/cross_wrapper_mingw.sh make"
+
+  - name: Package Build
+    become: true
+    become_user: "{{ travis_user }}"
+    args:
+      chdir: "{{ lmd_dir }}"
+    environment:
+      BUILD_TYPE: "linux-cross-mingw32"
+    command: "sh build/package_build.sh"
+
+  - name: Copy Build to Host
+    become: true
+    become_user: "root"
+    copy:
+      src: "{{ lmd_dir }}/dist"
+      dest: "/build"
+      remote_src: yes
