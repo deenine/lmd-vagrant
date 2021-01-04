@@ -55,6 +55,56 @@
            version=himd-json
            dest={{ lmd_dir }}
 
+   - name: Install dependencies (native-gcc)
+     become: true
+     become_user: "{{ travis_user }}"
+     args:
+       chdir: "{{ lmd_dir }}"
+     environment:
+       BUILD_TYPE: "linux-native-gcc"
+     command: "sh build/install_dependencies.sh"
+
+   - name: qmake (native-gcc)
+     become: true
+     become_user: "{{ travis_user }}"
+     args:
+       chdir: "{{ lmd_dir }}"
+     environment:
+       BUILD_TYPE: "linux-native-gcc"
+     command: "qmake CONFIG+=without_gui"
+
+   - name: make (native-gcc)
+     become: true
+     become_user: "{{ travis_user }}"
+     args:
+       chdir: "{{ lmd_dir }}"
+     environment:
+       BUILD_TYPE: "linux-native-gcc"
+     command: "make"
+
+   - name: Package Build
+     become: true
+     become_user: "{{ travis_user }}"
+     args:
+       chdir: "{{ lmd_dir }}"
+     environment:
+       BUILD_TYPE: "linux-native-gcc"
+     command: "sh build/package_build.sh"
+
+   - name: Copy Build to Host
+     become: true
+     become_user: "root"
+     copy:
+       src: "{{ lmd_dir }}/dist"
+       dest: "/build"
+       remote_src: yes
+
+   - name: make clean
+     become: true
+     become_user: "{{ travis_user }}"
+     args:
+       chdir: "{{ lmd_dir }}"
+     command: "make clean && make distclean"
 
    - name: Install dependencies (mingw32) (very slow step)
      become: true
