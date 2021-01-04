@@ -106,6 +106,13 @@
        chdir: "{{ lmd_dir }}"
      command: "make clean && make distclean"
 
+   - name: make clean
+     become: true
+     become_user: "{{ travis_user }}"
+     args:
+       chdir: "{{ lmd_dir }}"
+     command: "make distclean"
+
    - name: Install dependencies (mingw32) (very slow step)
      become: true
      become_user: "{{ travis_user }}"
@@ -114,7 +121,6 @@
      environment:
        BUILD_TYPE: "linux-cross-mingw32"
      command: "sh build/install_dependencies.sh"
-
 
    - name: qmake (mingw32)
      become: true
