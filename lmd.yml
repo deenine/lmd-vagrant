@@ -104,9 +104,9 @@
      become_user: "{{ travis_user }}"
      args:
        chdir: "{{ lmd_dir }}"
-     command: "make clean && make distclean"
+     command: "make clean"
 
-   - name: make clean
+   - name: make distclean
      become: true
      become_user: "{{ travis_user }}"
      args:
